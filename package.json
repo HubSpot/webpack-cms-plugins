@@ -16,6 +16,9 @@
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
+  "peerDependencies": {
+    "webpack": "^5.0.0"
+  },
   "dependencies": {
     "@hubspot/cli-lib": "^3.0.1"
   }
