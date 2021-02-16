@@ -1,25 +1,25 @@
-const { upload } = require('@hubspot/cli-lib/api/fileMapper');
+const { upload } = require("@hubspot/cli-lib/api/fileMapper");
 const {
   loadConfig,
   getAccountId,
   checkAndWarnGitInclusion,
-} = require('@hubspot/cli-lib');
+} = require("@hubspot/cli-lib");
 const {
   ApiErrorContext,
   logApiUploadErrorInstance,
-} = require('@hubspot/cli-lib/errorHandlers');
-const { isAllowedExtension } = require('@hubspot/cli-lib/path');
+} = require("@hubspot/cli-lib/errorHandlers");
+const { isAllowedExtension } = require("@hubspot/cli-lib/path");
 const {
   LOG_LEVEL,
   setLogLevel,
   setLogger,
-} = require('@hubspot/cli-lib/logger');
-const path = require('path');
+} = require("@hubspot/cli-lib/logger");
+const path = require("path");
 setLogLevel(LOG_LEVEL.LOG);
 loadConfig();
 checkAndWarnGitInclusion();
 
-const pluginName = 'HubSpotAutoUploadPlugin';
+const pluginName = "HubSpotAutoUploadPlugin";
 
 class HubSpotAutoUploadPlugin {
   constructor(options = {}) {
@@ -33,10 +33,18 @@ class HubSpotAutoUploadPlugin {
   apply(compiler) {
     const webpackLogger = compiler.getInfrastructureLogger(pluginName);
     setLogger(webpackLogger);
+    let isFirstCompile = true;
 
-    compiler.hooks.done.tapPromise(pluginName, async stats => {
+    compiler.hooks.done.tapPromise(pluginName, async (stats) => {
       const { compilation } = stats;
-      compilation.emittedAssets.forEach(filename => {
+
+      const assets = Object.keys(compilation.assets).filter((asset) => {
+        return isFirstCompile ? true : compilation.emittedAssets.has(asset);
+      });
+
+      isFirstCompile = false;
+
+      assets.forEach((filename) => {
         const outputPath = compilation.getPath(compilation.compiler.outputPath);
         const filepath = path.join(outputPath, filename);
 
@@ -49,7 +57,7 @@ class HubSpotAutoUploadPlugin {
           .then(() => {
             webpackLogger.info(`Uploaded ${dest} to account ${this.accountId}`);
           })
-          .catch(error => {
+          .catch((error) => {
             webpackLogger.error(`Uploading ${dest} failed`);
             logApiUploadErrorInstance(
               error,
