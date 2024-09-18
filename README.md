@@ -1,10 +1,10 @@
 # `@hubspot/webpack-cms-plugins`
 
-The `@hubspot/webpack-cms-plugins` packages contains plugins designed to make using webpack to compile HubSpot CMS assets more straightforward. Instead of using `webpack-dev-server`, the idea is to use generate assets locally and then upload them to the HubSpot CMS for previewing and testing. The plugin is designed to work together with [@hubspot/cli](https://www.npmjs.com/package/@hubspot/cli).
+The `@hubspot/webpack-cms-plugins` packages contains plugins designed to make using webpack to compile HubSpot CMS assets more straightforward. Instead of using `webpack-dev-server`, the idea is to generate assets locally and then upload them to the HubSpot CMS for previewing and testing. The plugin is designed to work together with [@hubspot/cli](https://www.npmjs.com/package/@hubspot/cli).
 
 ## Why is this needed?
 
-This plugin makes using webpack to compile JavaScript and CSS and using the compiled assets in HubSpot CMS modules and templates straightforward, so that during development it is possible to test using real HubSpot content and the editing experience can be tested.
+This plugin makes it easy to use webpack-compiled assets in HubSpot CMS modules and templates. This makes it easy and seamlessly add a compilation step to the local development flow, and enables testing using real HubSpot content.
 
 ## Usage
 
@@ -48,12 +48,15 @@ module.exports = ({ account, autoupload }) => ({
       src: 'dist',
       dest: 'my-project',
     }),
-    new CopyWebpackPlugin([
-      { from: 'src/images', to: 'images' },
-      { from: 'src/templates', to: 'templates' },
-    ]),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'src/images', to: 'images' },
+        { from: 'src/templates', to: 'templates' },
+      ]
+    }),
   ],
 });
 ```
 
-3. Run `webpack --watch --env.account 123 --env.autoupload` to compile your project and automatically upload assets.
+3. Run `webpack --watch --env account 123 --env autoupload` to compile your project and automatically upload assets. Replace `123` with your unique Hub ID.
+
