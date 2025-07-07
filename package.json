@@ -15,7 +15,7 @@
     "registry": "https://registry.npmjs.org/"
   },
   "dependencies": {
-    "@hubspot/local-dev-lib": "2.0.1"
+    "@hubspot/local-dev-lib": "3.7.1"
   },
   "devDependencies": {
     "eslint": "7.32.0",
