@@ -8,7 +8,7 @@ This plugin makes it easy to use webpack-compiled assets in HubSpot CMS modules 
 
 ## Usage
 
-1. Set up a `hubspot.config.yml` using the HubSpot CMS local development [instructions](https://designers.hubspot.com/docs/tools/local-development).
+1. [Configure HubSpot local development tools](https://designers.hubspot.com/docs/tools/local-development).
 2. Add the plugin to your `webpack.config.js`. The `src` should be a path to the directory where the webpack compiled code is output and the `dest` property is the path where the assets should be uploaded in your HubSpot account.
 
 Example `webpack.config.js`
